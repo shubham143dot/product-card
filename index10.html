@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Cards | React Mini Project</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            background: linear-gradient(90deg, #4361ee, #3a0ca3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #6c757d;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        
+        @media (min-width: 992px) {
+            .app-container {
+                flex-direction: row;
+            }
+        }
+        
+        .form-section {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+        }
+        
+        .contacts-section {
+            flex: 2;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #3a0ca3;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #495057;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            border-color: #4361ee;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .contact-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.5s forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            padding: 25px 20px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            object-fit: cover;
+            margin: 0 auto 15px;
+            background: #f0f4ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: #3a0ca3;
+        }
+        
+        .contact-name {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .contact-title {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        .contact-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .contact-info i {
+            width: 40px;
+            height: 40px;
+            background: #f0f4ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #4361ee;
+            font-size: 1.1rem;
+        }
+        
+        .contact-detail {
+            font-size: 0.95rem;
+            color: #495057;
+        }
+        
+        .contact-actions {
+            display: flex;
+            border-top: 1px solid #e9ecef;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            color: #6c757d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+        
+        .action-btn:hover {
+            background: #f8f9fa;
+            color: #4361ee;
+            transform: translateY(-3px);
+        }
+        
+        .action-btn i {
+            display: block;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .empty-state i {
+            font-size: 5rem;
+            color: #e2e8f0;
+            margin-bottom: 20px;
+        }
+        
+        .empty-state h3 {
+            font-size: 1.8rem;
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+        
+        .counter {
+            background: #4cc9f0;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #4cc9f0;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+            cursor: pointer;
+            z-index: 99;
+            transition: all 0.3s ease;
+        }
+        
+        .floating-btn:hover {
+            transform: translateY(-5px) rotate(90deg);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.5);
+        }
+        
+        .card-enter {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        
+        .card-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 500ms, transform 500ms;
+        }
+        
+        .card-exit {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .card-exit-active {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 500ms, transform 500ms;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // Main App Component
+        const App = () => {
+            const [contacts, setContacts] = React.useState([
+                {
+                    id: 1,
+                    name: "Sarah Johnson",
+                    title: "UX Designer",
+                    email: "sarah@example.com",
+                    phone: "+1 (555) 123-4567",
+                    group: "Design Team",
+                    avatar: "SD"
+                },
+                {
+                    id: 2,
+                    name: "Michael Chen",
+                    title: "Frontend Developer",
+                    email: "michael@example.com",
+                    phone: "+1 (555) 987-6543",
+                    group: "Development",
+                    avatar: "MC"
+                },
+                {
+                    id: 3,
+                    name: "Emma Rodriguez",
+                    title: "Project Manager",
+                    email: "emma@example.com",
+                    phone: "+1 (555) 246-8101",
+                    group: "Management",
+                    avatar: "ER"
+                }
+            ]);
+            
+            const [showForm, setShowForm] = React.useState(false);
+            const [notification, setNotification] = React.useState({ show: false, message: "" });
+            
+            const addContact = (contact) => {
+                const newContact = {
+                    ...contact,
+                    id: Date.now(),
+                    avatar: contact.name.split(' ').map(n => n[0]).join('')
+                };
+                
+                setContacts([newContact, ...contacts]);
+                showNotification("Contact added successfully!");
+            };
+            
+            const deleteContact = (id) => {
+                setContacts(contacts.filter(contact => contact.id !== id));
+                showNotification("Contact deleted");
+            };
+            
+            const showNotification = (message) => {
+                setNotification({ show: true, message });
+                setTimeout(() => {
+                    setNotification({ show: false, message: "" });
+                }, 3000);
+            };
+            
+            return (
+                <div className="container">
+                    <header>
+                        <h1>Contact Cards</h1>
+                        <p className="subtitle">Create and manage your contacts with this interactive React application. Add new contacts, view details, and organize your network.</p>
+                    </header>
+                    
+                    <div className="app-container">
+                        <div className="form-section">
+                            <h2 className="section-title">
+                                <i className="fas fa-user-plus"></i> Add New Contact
+                            </h2>
+                            <ContactForm onAddContact={addContact} />
+                        </div>
+                        
+                        <div className="contacts-section">
+                            <h2 className="section-title">
+                                <i className="fas fa-address-book"></i> My Contacts 
+                                <span className="counter">{contacts.length}</span>
+                            </h2>
+                            
+                            {contacts.length > 0 ? (
+                                <div className="contacts-grid">
+                                    {contacts.map(contact => (
+                                        <ContactCard 
+                                            key={contact.id} 
+                                            contact={contact} 
+                                            onDelete={deleteContact} 
+                                        />
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="empty-state">
+                                    <i className="fas fa-user-friends"></i>
+                                    <h3>No contacts yet</h3>
+                                    <p>Add your first contact using the form on the left</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    
+                    <div 
+                        className="floating-btn pulse" 
+                        onClick={() => setShowForm(!showForm)}
+                    >
+                        <i className="fas fa-plus"></i>
+                    </div>
+                    
+                    <div className={`notification ${notification.show ? 'show' : ''}`}>
+                        <i className="fas fa-check-circle"></i> {notification.message}
+                    </div>
+                </div>
+            );
+        };
+        
+        // Contact Form Component
+        const ContactForm = ({ onAddContact }) => {
+            const [formData, setFormData] = React.useState({
+                name: '',
+                email: '',
+                phone: '',
+                title: '',
+                group: 'Work'
+            });
+            
+            const handleChange = (e) => {
+                const { name, value } = e.target;
+                setFormData(prev => ({ ...prev, [name]: value }));
+            };
+            
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                if (!formData.name || !formData.email) {
+                    alert('Name and Email are required');
+                    return;
+                }
+                
+                onAddContact(formData);
+                setFormData({
+                    name: '',
+                    email: '',
+                    phone: '',
+                    title: '',
+                    group: 'Work'
+                });
+            };
+            
+            return (
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label htmlFor="name">Full Name</label>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            name="name" 
+                            value={formData.name} 
+                            onChange={handleChange} 
+                            placeholder="Enter full name" 
+                            required 
+                        />
+                    </div>
+                    
+                    <div className="form-group">
+                        <label htmlFor="email">Email Address</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            value={formData.email} 
+                            onChange={handleChange} 
+                            placeholder="Enter email address" 
+                            required 
+                        />
+                    </div>
+                    
+                    <div className="form-group">
+                        <label htmlFor="phone">Phone Number</label>
+                        <input 
+                            type="tel" 
+                            id="phone" 
+                            name="phone" 
+                            value={formData.phone} 
+                            onChange={handleChange} 
+                            placeholder="Enter phone number" 
+                        />
+                    </div>
+                    
+                    <div className="form-group">
+                        <label htmlFor="title">Job Title</label>
+                        <input 
+                            type="text" 
+                            id="title" 
+                            name="title" 
+                            value={formData.title} 
+                            onChange={handleChange} 
+                            placeholder="Enter job title" 
+                        />
+                    </div>
+                    
+                    <div className="form-group">
+                        <label htmlFor="group">Group</label>
+                        <select 
+                            id="group" 
+                            name="group" 
+                            value={formData.group} 
+                            onChange={handleChange}
+                        >
+                            <option value="Work">Work</option>
+                            <option value="Family">Family</option>
+                            <option value="Friends">Friends</option>
+                            <option value="Clients">Clients</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" className="btn">
+                        <i className="fas fa-plus-circle"></i> Add Contact
+                    </button>
+                </form>
+            );
+        };
+        
+        // Contact Card Component
+        const ContactCard = ({ contact, onDelete }) => {
+            const [showActions, setShowActions] = React.useState(false);
+            
+            return (
+                <div className="contact-card">
+                    <div className="card-header">
+                        <div className="avatar">
+                            {contact.avatar}
+                        </div>
+                        <h3 className="contact-name">{contact.name}</h3>
+                        <p className="contact-title">{contact.title}</p>
+                    </div>
+                    
+                    <div className="card-body">
+                        <div className="contact-info">
+                            <i className="fas fa-envelope"></i>
+                            <div className="contact-detail">{contact.email}</div>
+                        </div>
+                        
+                        <div className="contact-info">
+                            <i className="fas fa-phone"></i>
+                            <div className="contact-detail">{contact.phone || 'N/A'}</div>
+                        </div>
+                        
+                        <div className="contact-info">
+                            <i className="fas fa-users"></i>
+                            <div className="contact-detail">{contact.group}</div>
+                        </div>
+                        
+                        <div className="contact-actions">
+                            <div className="action-btn" onClick={() => setShowActions(!showActions)}>
+                                <i className="fas fa-ellipsis-h"></i>
+                                <span>More</span>
+                            </div>
+                            
+                            <div className="action-btn">
+                                <i className="fas fa-envelope"></i>
+                                <span>Email</span>
+                            </div>
+                            
+                            <div className="action-btn" onClick={() => onDelete(contact.id)}>
+                                <i className="fas fa-trash"></i>
+                                <span>Delete</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+        
+        // Render the app
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
